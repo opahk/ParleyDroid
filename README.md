@@ -13,7 +13,7 @@ creating the KVTML2 Java data structures and parsing class!
 
 KVTML2 vocabulary files can be created and edited with Parley and other
 applications from the "KDE Education Project". Look at 
-[http://edu.kde.org/parley/](http://edu.kde.org/parley/)  for further information about Parley 
+[http://edu.kde.org/parley/](http://edu.kde.org/parley/) for further information about Parley 
 or to download vocabulary files. Go to [edu.kde.org](http://edu.kde.org/) for general 
 information about KDE-Edu.
 

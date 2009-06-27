@@ -79,6 +79,10 @@ public class ArabicReshaper
 	public static String Reshaper(String UnshapedAra)
 	{
 		String _RetString = "";
+
+        if (UnshapedAra == null || UnshapedAra.length() == 0) {
+            return _RetString;
+        }
 	
 		int nLen = UnshapedAra.length();
 		char [] bString = new char[nLen];
