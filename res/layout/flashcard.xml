@@ -4,7 +4,7 @@
 	 android:background="#fff">
  <ViewFlipper android:id="@+id/FCViewFlipper"
 			android:layout_width="fill_parent" android:layout_height="fill_parent">
-<TextView  
+<ImageView  
 	android:gravity="center"
 	android:layout_alignParentTop="true" 
 	android:layout_marginTop="10px"
@@ -16,7 +16,7 @@
 	android:textColor="#000"
     android:id="@+id/word1"
     />
-    <TextView  
+    <ImageView  
 	android:gravity="center"
 	android:layout_alignParentTop="true" 
 	android:layout_marginTop="10px"

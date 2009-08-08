@@ -1,5 +1,6 @@
 /***************************************************************************
 *   Copyright (C) 2009  Casey Link <unnamedrambler@gmail.com>             *
+*   			  2009  Frank Eckert <f.c.e@web.de> 		              *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -42,11 +43,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
+import android.widget.ImageView;
+import android.graphics.drawable.BitmapDrawable;
+
 public class FlashcardSession extends Activity
 {
 
-    private TextView mWord1;
-    private TextView mWord2;
+    private ImageView mWord1;
+    private ImageView mWord2;
     private ViewFlipper mViewFlipper;
 
     private Entry[] mSessionEntries;
@@ -82,8 +86,8 @@ public class FlashcardSession extends Activity
         super.onCreate( savedInstanceState );
         setContentView( R.layout.flashcard );
 
-        mWord1 = ( TextView ) findViewById( R.id.word1 );
-        mWord2 = ( TextView ) findViewById( R.id.word2 );
+        mWord1 = ( ImageView ) findViewById( R.id.word1 );
+        mWord2 = ( ImageView ) findViewById( R.id.word2 );
         mViewFlipper = ( ViewFlipper ) findViewById( R.id.FCViewFlipper );
         mViewFlipper.setAnimateFirstView( false );
         mViewFlipper.setAnimationCacheEnabled( false );
@@ -334,14 +338,21 @@ public class FlashcardSession extends Activity
         setTitle( "Exercise (" + ( mCurrentId + 1 ) + "/" + mTotalEntryCount
                 + ")" );
 
-        String word1 = e.getWord( mLangId1 ).getText();
-        String word2 = e.getWord( mLangId2 ).getText();
+        // calculate hash value of word and grab corresponding bitmap
+        String word1 = hash(e.getWord( mLangId1 ).getText());
+        String word2 = hash(e.getWord( mLangId2 ).getText());
+        // directory is currently hard-coded
+        BitmapDrawable image1 = new BitmapDrawable("/sdcard/latex/"+word1+".png");
+        BitmapDrawable image2 = new BitmapDrawable("/sdcard/latex/"+word2+".png");
 
-        mWord2.setTypeface( Typeface.createFromAsset( getAssets(),
-                ParleyApplication.getFont() ) );
+//        mWord2.setTypeface( Typeface.createFromAsset( getAssets(),
+//                ParleyApplication.getFont() ) );
 
-        mWord1.setText( word1 );
-        mWord2.setText( ArabicReshaper.Reshaper( word2 ) );
+//        mWord1.setText( word1 );
+//        mWord2.setText( ArabicReshaper.Reshaper( word2 ) );
+        
+        mWord1.setImageDrawable(image1);
+        mWord2.setImageDrawable(image2);
         mViewFlipper.setDisplayedChild( 0 );
     }
 
@@ -351,4 +362,26 @@ public class FlashcardSession extends Activity
         return mVocSet.createRandomSession( 0 ); // level 0 (all entries never
         // marked as known)
     }
+
+    /* P. J. Weinberger Hash Function 
+     * introduced and modified to match the one used in Qt's qHash function
+     * Java version inspired by Arash Partow - 2002  General Hash functions */
+    private String hash(String str) {
+    	      long hash              = 0;
+    	      long test              = 0;
+
+    	      for(int i = 0; i < str.length(); i++)
+    	      {
+    	         hash = (hash << 4) + str.charAt(i);
+    	         if((test = hash & (long)(0xF0000000) )  != 0)
+    	         {
+    	            hash = (( hash ^ (test >> 23)) & (~test));
+    	         }
+    	      }
+
+    	      String hashstr = new Long(hash).toString();
+    	      return hashstr;
+    }
+    
+
 }
