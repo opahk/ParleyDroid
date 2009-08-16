@@ -19,6 +19,7 @@
 package com.binaryelysium.android.parley.data;
 
 import java.util.Hashtable;
+import java.util.GregorianCalendar;
 
 /**
  * @author michhof
@@ -29,7 +30,9 @@ public class Word {
   private String mPronunciation;
   private String mType;
   private String mSpecialWordType;
-
+  private int mLevel = 0;
+  private GregorianCalendar mDate;
+  
   //constants for conjugation arrays
   public static final int NUMBER_OF_PRONOUNS = 5; //size of conjugation arrays
   public static final int CONJ_FIRSTPERSON = 0; //index for firstperson conjugations...
@@ -52,6 +55,7 @@ public class Word {
     mConjugationsPlural = new Hashtable();
     mConjCountSingular = new Hashtable();
     mConjCountPlural = new Hashtable();
+    mDate = new GregorianCalendar();
     mTranslationId = translationId;
     mVocSet = vocSet;
   }
@@ -59,11 +63,30 @@ public class Word {
   public void setText(String text) {
     mText = text;
   }
-
+  
   public String getText() {
     return mText;
   }
 
+  public void setLevel(int level) {
+	  //System.out.println( "Setting level for Word");
+	  mLevel = level;
+	  //System.out.println( "Setting level for Word: completed");
+  }
+  
+  public int getLevel() {
+	  //System.out.println( "getting level for Word");
+	  return mLevel;
+  }
+
+  public void setDate(GregorianCalendar date) {
+	  mDate = date;
+  }
+  
+  public GregorianCalendar getDate() {
+	  return mDate;
+  }
+  
   public void setPronunciation(String pron) {
     mPronunciation = pron;    
   }
@@ -156,3 +179,4 @@ public class Word {
   }
 
 }
+

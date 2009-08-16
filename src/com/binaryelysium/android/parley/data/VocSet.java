@@ -23,6 +23,8 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Random;
 import java.util.Vector;
+import java.util.GregorianCalendar;
+
 
 /**
  * @author michhof
@@ -122,6 +124,9 @@ public class VocSet {
   
   public Entry[] createSession(int level) {    
     Vector<Entry> entryVector = new Vector<Entry>();
+    long difference = 0;
+    long threshold = 0;
+    GregorianCalendar now = new GregorianCalendar();
     //run through all entries associated with active lessons and append them to the vector if they meet the conditions
     for(Enumeration<Lesson> en = mLessons.elements(); en.hasMoreElements(); ) {
       Lesson l = (Lesson)en.nextElement();
@@ -130,8 +135,18 @@ public class VocSet {
           String id = l.getEntryId(i);
           //the entry with the given id is in this active lesson, and therefore should be in the vector
           Entry e = (Entry)mAllEntries.get(id);
-          if(e.getLevel() == level) //only if in the specified level
-            entryVector.addElement(e);
+          // TODO check in some testing 
+          //if(e.getLevel() == level) //only if in the specified level
+          //difference = (long) (now.getTime().getTime() - (e.getWord("1").getDate()).getTime().getTime())/1000;
+          //threshold = e.getLevel() * e.getLevel() * 3600 * 24;
+          //System.out.println( "Threshold " + threshold);
+          //if(difference > threshold)
+          if(e.isExaminable())
+          {
+              System.out.println( "adding entry");
+        	  entryVector.addElement(e);  
+          }
+          else System.out.println( "dismissing entry");
         }
       }
     }

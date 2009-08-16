@@ -277,7 +277,7 @@ public class FlashcardSession extends Activity
     
     private void markKnown()
     {
-        mSessionEntries[mCurrentId].setLevel( 1 );
+        mSessionEntries[mCurrentId].setLevel( mSessionEntries[mCurrentId].getLevel() + 1);
         showNextEntry();
     }
 
@@ -287,7 +287,7 @@ public class FlashcardSession extends Activity
         if ( mCurrentId + 1 < mSessionEntries.length )
         {
             Entry e = mSessionEntries[++mCurrentId];
-            if ( e.getLevel() > 0 )
+            if ( !e.isExaminable() )
             { // entry is on a higher level (was already known)
                 showNextEntry(); // don't show it, but go to the next one
                 return;

@@ -25,6 +25,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Vector;
+import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
+import java.text.ParseException;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -317,6 +320,8 @@ public class Parley extends Activity
 
         private volatile boolean mCancelLoading = false; // for stopping the
 
+        private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        private GregorianCalendar someDate = new GregorianCalendar();
         // loading
 
         // (cancel by user)
@@ -425,7 +430,7 @@ public class Parley extends Activity
          * @throws XmlPullParserException
          */
         private void readDataSection( KXmlParser parser )
-                throws XmlPullParserException, IOException
+                throws XmlPullParserException, IOException, ParseException
         {
 
             // we are looking for one of the following sections:
@@ -826,7 +831,7 @@ public class Parley extends Activity
         }
 
         private void readEntriesSection( KXmlParser parser )
-                throws XmlPullParserException, IOException
+                throws XmlPullParserException, IOException, ParseException
         {
 
             // entries-section contains entry subsections
@@ -870,7 +875,7 @@ public class Parley extends Activity
         }
 
         private void readTranslationSubsection( KXmlParser parser, Entry e )
-                throws XmlPullParserException, IOException
+                throws XmlPullParserException, IOException, ParseException
         {
 
             // read translation id (attribute):
@@ -888,13 +893,17 @@ public class Parley extends Activity
                 // possible tags: text, inquery, comment, pronunciation,
                 // falsefriend, antonym, synonym, example,
                 // usage, paraphrase, image, sound
-                if ( tagName.equals( "grade" ) || tagName.equals( "wordtype" )
+                if ( tagName.equals( "wordtype" )
                         || tagName.equals( "comparison" )
                         || tagName.equals( "multiplechoice" ) )
                 {
                     parser.skipSubTree(); // skip subsections; positions parser
                     // on
                     // END_TAG
+                }
+                else if ( tagName.equals( "grade" ) )
+                {
+                	readGradeSubsection( parser, w );
                 }
                 else if ( tagName.equals( "conjugation" ) )
                 { // subsection
@@ -922,6 +931,33 @@ public class Parley extends Activity
             } // end of translation subsection
         }
 
+        private void readGradeSubsection( KXmlParser parser, Word w )
+        		throws XmlPullParserException, IOException, ParseException
+        {
+        	 while ( parser.nextTag() != XmlPullParser.END_TAG )
+             { // while in the grade subsection)
+                 // read in the content tags:
+                 parser.require( XmlPullParser.START_TAG, null, null );
+                 String tagName = parser.getName(); // found tag name
+
+                 if ( tagName.equals( "currentgrade" ) )
+                 { // content tag naming the tense
+                     w.setLevel( new Integer(parser.nextText())); // reads tag-content; positions
+                     // parser on END_TAG
+                 }
+                 else if ( tagName.equals( "date") )
+                 { // subsections
+                	 someDate.setTime(df.parse(parser.nextText()));
+                	 w.setDate(someDate);
+                 }
+                 else 
+                 {
+                     parser.skipSubTree(); // unknown tag - skip
+                 }
+             }
+        }
+        
+       
         private void readConjugationSubsection( KXmlParser parser, Word w )
                 throws XmlPullParserException, IOException
         {

@@ -11,9 +11,7 @@
 	android:layout_centerHorizontal="true" 
 	android:layout_height="fill_parent" 
 	android:layout_width="fill_parent"
-    android:text="Hello"
-    android:textSize="24pt"
-	android:textColor="#000"
+	android:scaleType="fitCenter"
     android:id="@+id/word1"
     />
     <ImageView  
@@ -23,9 +21,7 @@
 	android:layout_centerHorizontal="true" 
 	android:layout_height="fill_parent" 
 	android:layout_width="fill_parent"
-    android:text="Hello2"
-    android:textSize="24pt"
-	android:textColor="#000"
+    android:scaleType="fitCenter"
     android:id="@+id/word2"
     />
  </ViewFlipper>
